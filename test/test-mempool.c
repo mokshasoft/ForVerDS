@@ -33,7 +33,7 @@ void test3()
     pool = mempool_create(item_size, items);
     for (int i = 0; i < 2 * items; i++) {
         void* ptr = mempool_get(pool);
-        memset(ptr, 'a', item_size);
+        memset(ptr, (char)i, item_size);
         mempool_return(pool, ptr);
     }
     mempool_destroy(pool);
@@ -45,28 +45,27 @@ int test4()
     pool = mempool_create(10, 1);
     void* ptr1 = mempool_get(pool);
     void* ptr2 = mempool_get(pool);
+    mempool_return(pool, ptr1);
+    mempool_return(pool, ptr2);
     mempool_destroy(pool);
-    return ptr1 != NULL && ptr2 == NULL;
+    return ptr1 != NULL && ptr2 != NULL;
 }
 
 int test5()
 {
 #define ITEMS 10
     int item_size = 100;
-    void* ptrs[ITEMS];
+    void* ptrs[ITEMS*5];
     mempool* pool;
     pool = mempool_create(item_size, ITEMS);
-    for (int i = 0; i < ITEMS; i++) {
+    for (int i = 0; i < ITEMS*5; i++) {
         ptrs[i] = mempool_get(pool);
         memset(ptrs[i], (char)i, item_size);
         if (!ptrs[i]) {
             return 0;
         }
     }
-    if (mempool_get(pool)) {
-        return 0;
-    }
-    for (int i = 0; i < ITEMS; i++) {
+    for (int i = 0; i < ITEMS*5; i++) {
         mempool_return(pool, ptrs[i]);
     }
     mempool_destroy(pool);
