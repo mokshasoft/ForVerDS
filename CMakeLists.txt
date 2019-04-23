@@ -20,11 +20,11 @@ add_subdirectory(test)
 set(NAME data-structures)
 project(${NAME} C)
 
-file(GLOB static
+file(GLOB lib_files
     src/*.c
 )
 
-add_library(${NAME} EXCLUDE_FROM_ALL ${static})
+add_library(${NAME} SHARED ${lib_files})
 target_include_directories(${NAME} PUBLIC interface)
 target_link_libraries(
     ${NAME}

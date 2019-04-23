@@ -10,6 +10,7 @@
 
 module FFI.Mempool where
 
+import Data.Int
 import Foreign.C
 import Foreign.Ptr
 
@@ -21,7 +22,15 @@ import Foreign.Ptr
     void mempool_return(mempool* pool, void* ptr);
  -}
 
-foreign import ccall "mempool_create" mempool_create :: CInt -> CInt -> IO (Ptr a)
-foreign import ccall "mempool_destroy" mempool_destroy :: Ptr a -> IO ()
-foreign import ccall "mempool_get" mempool_get :: Ptr a -> IO (Ptr b)
-foreign import ccall "mempool_return" mempool_return :: Ptr a -> Ptr b -> IO ()
+newtype BlockPtr = BlockPtr
+    { blockPtr :: Ptr Int8
+    }
+
+newtype MempoolPtr = MempoolPtr
+    { mempoolPtr :: Ptr Int8
+    }
+
+foreign import ccall "mempool_create" mempool_create :: CInt -> CInt -> IO MempoolPtr
+foreign import ccall "mempool_destroy" mempool_destroy :: MempoolPtr -> IO ()
+foreign import ccall "mempool_get" mempool_get :: MempoolPtr -> IO BlockPtr
+foreign import ccall "mempool_return" mempool_return :: MempoolPtr -> BlockPtr -> IO ()

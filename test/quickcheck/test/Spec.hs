@@ -6,18 +6,17 @@
  See "LICENSE.txt" for details.
  -}
 
-import Test.Framework (defaultMain, testGroup)
-import Test.Framework.Providers.QuickCheck2 (testProperty)
 import Test.HUnit
-import Test.QuickCheck
 
 import Model.Mempool as Model
 import FFI.Mempool as FFI
 import Foreign.Ptr
+import QuickCheck
 
 main :: IO ()
-main =
+main = do
     runHUnitTests
+    runQuickCheckTests
 
 -- HUnit
 
@@ -48,7 +47,7 @@ hTest4 = TestCase (
     do mempool <- FFI.mempool_create 10 1
        ptr <- FFI.mempool_get mempool
        FFI.mempool_destroy mempool
-       assertBool "No memory returned" $ ptr /= nullPtr
+       assertBool "No memory returned" $ blockPtr ptr /= nullPtr
                    )
 
 hTest5 = TestCase (
@@ -56,7 +55,7 @@ hTest5 = TestCase (
        ptr1 <- FFI.mempool_get mempool
        ptr2 <- FFI.mempool_get mempool
        FFI.mempool_destroy mempool
-       assertBool "Memory not returned from empty mempool" $ ptr2 /= nullPtr
+       assertBool "Memory not returned from empty mempool" $ blockPtr ptr2 /= nullPtr
                    )
 
 hTests = TestList
