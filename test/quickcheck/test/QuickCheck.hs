@@ -45,7 +45,7 @@ performOnModel [] = []
 performOnModel (a : as) =
     case a of
         Read _ d -> d : performOnModel as
-        otherwise -> performOnModel as
+        _ -> performOnModel as
 
 performOnLibrary :: CInt -> MempoolPtr -> [Action] -> IO [Data]
 performOnLibrary block_size pool as =
@@ -67,9 +67,9 @@ performOnLibrary' block_size pool (a : as) m =
             performOnLibrary' block_size pool as m
         Read idx d -> do
             let ptr = blockPtr $ m Map.! idx
-            res <- mapM (\off -> peekByteOff ptr off) [0..fromIntegral (block_size - 1)] :: IO [Data]
+            res <- mapM (peekByteOff ptr) [0..fromIntegral (block_size - 1)] :: IO [Data]
             if all (== d) res
-                then liftM (d :) $ performOnLibrary' block_size pool as m
+                then fmap (d :) $ performOnLibrary' block_size pool as m
                 else performOnLibrary' block_size pool as m
 
 getSequence :: Index -> Data -> [Action]
@@ -85,7 +85,7 @@ actions = do
     nbr <- arbitrary
     let idx = [1..nbr]
     values <- arbitrary :: Gen [Data]
-    let cmds = map (\(i, v) -> getSequence i v) $ zip idx values
+    let cmds = zipWith getSequence idx values
     actions' cmds
 
 actions' :: [[Action]] -> Gen [Action]
