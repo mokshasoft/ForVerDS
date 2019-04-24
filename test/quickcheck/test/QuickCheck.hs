@@ -10,21 +10,14 @@ module QuickCheck
     ( runQuickCheckTests
     ) where
 
-import Control.Monad
-import qualified Data.Map as Map
 import Data.Int
-import Data.List
-import Data.Ord
-
-import Test.Framework
-import Test.Framework.Providers.QuickCheck2
+import qualified Data.Map as Map
+import Foreign.Storable
+import Foreign.C.Types
 import Test.QuickCheck
 import Test.QuickCheck.Monadic
 
 import FFI.Mempool
-import Foreign.Ptr
-import Foreign.Storable
-import Foreign.C.Types
 
 runQuickCheckTests :: IO ()
 runQuickCheckTests =
