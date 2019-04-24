@@ -28,7 +28,7 @@ import Foreign.C.Types
 
 runQuickCheckTests :: IO ()
 runQuickCheckTests =
-    quickCheck prop_ReadSameValues
+    quickCheck (withMaxSuccess 10000 prop_ReadSameValues)
 
 type Index = Int
 type Data = Int8
