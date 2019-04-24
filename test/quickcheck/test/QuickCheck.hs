@@ -91,10 +91,16 @@ actions = do
 actions' :: [[Action]] -> Gen [Action]
 actions' a = return $ concat a
 
-prop_ReadSameValues :: CInt -> CInt -> Property
-prop_ReadSameValues block_size nbr_blocks =
-    block_size > 1 && nbr_blocks > 1 ==>
-    forAll actions $ \a -> do
+configs :: Gen (CInt, CInt)
+configs = do
+    block_size <- choose (1, 10)
+    nbr_blocks <- choose (1, 10)
+    return (block_size, nbr_blocks)
+
+prop_ReadSameValues :: Property
+prop_ReadSameValues =
+    forAll actions $ \a ->
+    forAll configs $ \(block_size, nbr_blocks) -> do
         let golden = performOnModel a
         monadicIO $ do
             dd <- run $ do
