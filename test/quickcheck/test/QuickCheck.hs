@@ -9,6 +9,7 @@ module QuickCheck
   ( runQuickCheckTests
   ) where
 
+import Control.Monad
 import Data.Int
 import qualified Data.Map as Map
 import Foreign.C.Types
@@ -80,7 +81,7 @@ actions = do
   actions' cmds
 
 actions' :: [[Action]] -> Gen [Action]
-actions' a = return $ concat a
+actions' = foldM mix []
 
 mix :: [Action] -> [Action] -> Gen [Action]
 mix [] [] = return []
