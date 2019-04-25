@@ -82,6 +82,16 @@ actions = do
 actions' :: [[Action]] -> Gen [Action]
 actions' a = return $ concat a
 
+mix :: [Action] -> [Action] -> Gen [Action]
+mix [] [] = return []
+mix as [] = return as
+mix [] bs = return bs
+mix (a:as) (b:bs) = do
+  rnd <- arbitrary
+  if rnd
+    then fmap (a :) (mix as (b:bs))
+    else fmap (b :) (mix (a:as) bs)
+
 configs :: Gen (CInt, CInt)
 configs = do
   block_size <- choose (1, 10)
