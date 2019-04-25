@@ -66,7 +66,7 @@ performOnLibrary' block_size pool (a:as) m =
       res <-
         mapM (peekByteOff ptr) [0 .. fromIntegral (block_size - 1)] :: IO [Data]
       if all (== d) res
-        then fmap (d :) $ performOnLibrary' block_size pool as m
+        then fmap (d :) (performOnLibrary' block_size pool as m)
         else performOnLibrary' block_size pool as m
 
 getSequence :: Index -> Data -> [Action]
@@ -90,8 +90,8 @@ mix [] bs = return bs
 mix (a:as) (b:bs) = do
   rnd <- arbitrary
   if rnd
-    then fmap (a :) (mix as (b:bs))
-    else fmap (b :) (mix (a:as) bs)
+    then fmap (a :) (mix as (b : bs))
+    else fmap (b :) (mix (a : as) bs)
 
 configs :: Gen (CInt, CInt)
 configs = do
