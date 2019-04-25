@@ -126,10 +126,10 @@ prop_ReadSameValues =
     forAll configs $ \(block_size, nbr_blocks) -> do
       let golden = performOnModel a
       monadicIO $ do
-        dd <-
+        test_result <-
           run $ do
             pool <- mempool_create block_size nbr_blocks
-            d <- performOnLibrary block_size pool a
+            readValues <- performOnLibrary block_size pool a
             mempool_destroy pool
-            return d
-        assert (golden == dd)
+            return readValues
+        assert (golden == test_result)
