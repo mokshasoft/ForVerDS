@@ -144,11 +144,10 @@ void slab_list_destroy(dl_list* slab_list)
 {
     node* itr = slab_list->head;
     node* next = NULL;
-    do
-    {
+    do {
         next = itr->next;
         free(itr);
-	itr = next;
+        itr = next;
     } while (itr);
     dl_list_destroy(slab_list);
 }

@@ -55,17 +55,17 @@ int test5()
 {
 #define ITEMS 10
     int item_size = 100;
-    void* ptrs[ITEMS*5];
+    void* ptrs[ITEMS * 5];
     mempool* pool;
     pool = mempool_create(item_size, ITEMS);
-    for (int i = 0; i < ITEMS*5; i++) {
+    for (int i = 0; i < ITEMS * 5; i++) {
         ptrs[i] = mempool_get(pool);
         memset(ptrs[i], (char)i, item_size);
         if (!ptrs[i]) {
             return 0;
         }
     }
-    for (int i = 0; i < ITEMS*5; i++) {
+    for (int i = 0; i < ITEMS * 5; i++) {
         mempool_return(pool, ptrs[i]);
     }
     mempool_destroy(pool);
