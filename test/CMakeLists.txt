@@ -41,3 +41,21 @@ target_link_libraries(
     data-structures
 )
 create_valgrind_target(${TEST})
+
+#
+# Tests for the mempoolk
+#
+
+set(TEST test-mempoolk)
+project(${TEST} C)
+
+file(GLOB static
+    test-mempoolk.c
+)
+
+add_executable(${TEST} EXCLUDE_FROM_ALL ${static})
+target_link_libraries(
+    ${TEST}
+    data-structures
+)
+create_valgrind_target(${TEST})
