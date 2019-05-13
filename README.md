@@ -36,3 +36,10 @@ and then in the GHCi prompt
 > runQuickCheckTests
 +++ OK, passed 10000 tests.
 ```
+
+## Valgrind
+Combining QuickCheck with [Valgrind](http://www.valgrind.org/) is a powerful combination to find memory errors in C code.
+```shell
+valgrind --leak-check=full --trace-children=yes stack test
+```
+This test run shows a lot of memory errors, but none are related to the tested library.
