@@ -38,7 +38,7 @@ struct mempool_t {
 
 // list functions
 
-dl_list* dl_list_create()
+static dl_list* dl_list_create()
 {
     dl_list* l = malloc(sizeof(dl_list));
     l->head = NULL;
@@ -46,12 +46,12 @@ dl_list* dl_list_create()
     return l;
 }
 
-void dl_list_destroy(dl_list* list)
+static void dl_list_destroy(dl_list* list)
 {
     free(list);
 }
 
-void dl_list_remove(dl_list* list, node* node)
+static void dl_list_remove(dl_list* list, node* node)
 {
     if (!node->prev) {
         list->head = node->next;
@@ -66,7 +66,7 @@ void dl_list_remove(dl_list* list, node* node)
     }
 }
 
-void dl_list_append(dl_list* list, node* n)
+static void dl_list_append(dl_list* list, node* n)
 {
     if (!list->head) {
         list->head = n;
@@ -84,17 +84,17 @@ void dl_list_append(dl_list* list, node* n)
 
 // slab functions
 
-node* slab_list_get_first_mem_node(node* slab_node)
+static node* slab_list_get_first_mem_node(node* slab_node)
 {
     return (node*)slab_node->data;
 }
 
-node* slab_list_get_last_mem_node(node* slab_node, size_t item_size, size_t nbr_items)
+static node* slab_list_get_last_mem_node(node* slab_node, size_t item_size, size_t nbr_items)
 {
     return get_node_ptr(slab_node->data, SIZEOF_MEMPOOL_DATA(item_size, nbr_items) - SIZEOF_NODE_HEADER - item_size);
 }
 
-node* slab_list_create_slab(size_t item_size, size_t nbr_items)
+static node* slab_list_create_slab(size_t item_size, size_t nbr_items)
 {
     node* slab_node = malloc(SIZEOF_NODE_HEADER + SIZEOF_MEMPOOL_DATA(item_size, nbr_items));
     slab_node->prev = NULL;
@@ -118,7 +118,7 @@ node* slab_list_create_slab(size_t item_size, size_t nbr_items)
     return slab_node;
 }
 
-dl_list* slab_list_create(size_t item_size, size_t nbr_items)
+static dl_list* slab_list_create(size_t item_size, size_t nbr_items)
 {
     // init and alloc list header
     dl_list* slab_list = dl_list_create();
@@ -128,7 +128,7 @@ dl_list* slab_list_create(size_t item_size, size_t nbr_items)
     return slab_list;
 }
 
-void slab_list_add_slab(mempool* pool)
+static void slab_list_add_slab(mempool* pool)
 {
     dl_list* slab_list = pool->slab_list;
     size_t item_size = pool->item_size;
@@ -140,7 +140,7 @@ void slab_list_add_slab(mempool* pool)
     pool->free_list->tail = slab_list_get_last_mem_node(slab_node, item_size, nbr_items);
 }
 
-void slab_list_destroy(dl_list* slab_list)
+static void slab_list_destroy(dl_list* slab_list)
 {
     node* itr = slab_list->head;
     node* next = NULL;
