@@ -25,6 +25,24 @@ function(create_valgrind_target target)
 endfunction()
 
 #
+# Tests for the linked-list
+#
+
+set(TEST test-dl-list)
+project(${TEST} C)
+
+file(GLOB static
+    test-dl-list.c
+)
+
+add_executable(${TEST} EXCLUDE_FROM_ALL ${static})
+target_link_libraries(
+    ${TEST}
+    data-structures
+)
+create_valgrind_target(${TEST})
+
+#
 # Tests for the mempool
 #
 
