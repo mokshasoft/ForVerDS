@@ -3,15 +3,16 @@
 #include <malloc.h>
 #include <stddef.h>
 
-struct dl_list_t {
-    item *head;
-    item *tail;
-};
-
 struct item_t {
     struct item_t *prev;
     struct item_t *next;
     void *ptr;
+};
+typedef struct item_t item;
+
+struct dl_list_t {
+    item *head;
+    item *tail;
 };
 
 dl_list* dl_list_create()
@@ -25,7 +26,6 @@ dl_list* dl_list_create()
 void dl_list_destroy(dl_list* list)
 {
     item *iter = list->head;
-    item *stop = list->tail;
 
     // free the item headers in the list
     while (iter != NULL) {
@@ -38,13 +38,12 @@ void dl_list_destroy(dl_list* list)
     free(list);
 }
 
-item* dl_list_append(dl_list* list, void* ptr)
+void dl_list_append(dl_list* list, void* ptr)
 {
     item *it = malloc(sizeof(item));
     it->ptr = ptr;
 
     if (!list->head) {
-        list->head = it;
         list->tail = it;
         it->prev = NULL;
         it->next = NULL;
@@ -53,26 +52,29 @@ item* dl_list_append(dl_list* list, void* ptr)
         it->prev = NULL;
         it->next->prev = it;
     }
+    list->head = it;
 }
 
-item* dl_list_head(dl_list* list)
+void* dl_list_head(dl_list* list)
 {
-    return list->head;
+    void* ptr = NULL;
+    if (list->head != NULL) {
+        ptr = list->head->ptr;
+    }
+    return ptr;
 }
 
-void dl_list_delete_item(dl_list* list, item* it)
+void dl_list_drop(dl_list* list)
 {
-    if (!it->prev) {
-        list->head = it->next;
-    } else {
-        it->prev->next = it->next;
+    item *head = list->head;
+    if (!head->prev) {
+        list->head = head->next;
     }
 
-    if (!it->next) {
-        list->tail = it->prev;
+    if (!head->next) {
+        list->tail = head->prev;
     } else {
-        it->next->prev = it->prev;
+        head->next->prev = head->prev;
     }
-
-    free(it);
+    free(head);
 }
