@@ -28,7 +28,7 @@ stack test
 Test the library in GHCi:
 ```shell
 cd test/quickchek
-stack ghci mempool-quickcheck:mempool-quickcheck-test
+stack ghci ForVerDS-QuickCheck:ForVerDS-QuickCheck-test
 ```
 
 and then in the GHCi prompt
