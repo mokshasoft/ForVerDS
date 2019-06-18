@@ -6,7 +6,7 @@ cabal-version:       >=1.10
 test-suite ForVerDS-QuickCheck-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
-  main-is:             Spec.hs
+  main-is:             TestSpec.hs
   other-modules:       FFI.Mempool
                      , Model.Mempool
                      , QuickCheck
