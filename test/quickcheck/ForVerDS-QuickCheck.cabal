@@ -9,6 +9,7 @@ test-suite ForVerDS-QuickCheck-test
   main-is:             TestSpec.hs
   other-modules:       FFI.Mempool
                      , Model.Mempool
+                     , MempoolQC
                      , QuickCheck
   build-depends:       base
                      , containers

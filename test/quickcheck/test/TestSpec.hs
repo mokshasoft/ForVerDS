@@ -6,11 +6,11 @@
  See "LICENSE.txt" for details.
  -}
 import Foreign.Ptr
-import QuickCheck
 import Test.HUnit
 
 import FFI.Mempool as FFI
 import Model.Mempool as Model
+import QuickCheck
 
 main :: IO ()
 main = do
